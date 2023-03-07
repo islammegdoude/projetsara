@@ -24,8 +24,8 @@ public:
 class Gamme
 {
 public:
-    int n; // nombre des taches dans une gamme 
-    Tache lis[40]; // 40 tache dans cette gamme 
+    int n;         // nombre des taches dans une gamme
+    Tache lis[40]; // 40 tache dans cette gamme
     void initialiser()
     {
         int i;
@@ -209,7 +209,7 @@ public:
 
         int l, min, min_r;
         o = 0;
-        // يرتب لي سومي مللي عندها أصغر r 
+        // يرتب لي سومي مللي عندها أصغر r
         for (l = 0; (l < k); l++)
         {
             min = info_r(tabsom[l]);
@@ -279,7 +279,7 @@ public:
                     k++;
                 }
             }
-            // ترتيب ال t[] حساب ال r 
+            // ترتيب ال t[] حساب ال r
             if (k != 0)
             {
                 n = 0;
@@ -428,67 +428,80 @@ public:
     int U(int x)
     {
         int i, j = 0, t = 0;
-        for (i = 0; i < nbrs; i++)
+        int k = 0; // crated by islam
+        int resultat = 0;
+        // *****
+        for (i = 0; i <= nbrs; i++)
         {
-            if (x == tabsom[i])
-                return (i + 1);
-        }
-        if (i == nbrs)
-        {
-            i = 0;
-            while ((i < 40) && (t == 0) && (tabpyr[i][j] != -1))
+            if (i != nbrs)
             {
-                while ((j < 40) && (t == 0) && (tabpyr[i][j] != -1) && (tabpyr[i][j] != 0))
+                if (x == tabsom[i])
                 {
-                    if (x == tabpyr[i][j])
-                    {
-                        t = 1;
-                    }
-                    j++;
+                    resultat = i + 1;
+                    break;
                 }
-                i++;
             }
-            return (i);
+            else
+            {
+                while ((k < 40) && (t == 0) && (tabpyr[k][j] != -1))
+                {
+                    while ((j < 40) && (t == 0) && (tabpyr[k][j] != -1) && (tabpyr[k][j] != 0))
+                    {
+                        if (x == tabpyr[k][j])
+                        {
+                            t = 1;
+                        }
+                        j++;
+                    }
+                    k++;
+                }
+                resultat = i;
+                break;
+            }
         }
-        return (i);
+        return resultat;
     }
     int V(int x)
     {
-        int i, j, t, m;
-        for (i = 0; i < nbrs; i++)
+        int i, j, t, m,resultat;
+        for (i = 0; i <= nbrs; i++)
         {
-            if (x == tabsom[i])
+            if (i != nbrs)
             {
-                m = i + 1;
-                return m;
-            }
-        }
-        if (i == nbrs)
-        {
-            for (i = 0; i < 40; i++)
-            {
-                j = 0;
-                t = 0;
-                while ((j < 40) && (tabpyr[i][j] != -1) && (t == 0))
+                if (x == tabsom[i])
                 {
-                    if (tabpyr[i][j] == x)
-                    {
-                        m = i;
-                        t = 1;
-                    }
-                    j++;
+                    resultat = i + 1;
+                    break;
                 }
             }
-            return m + 1;
+            else
+            {
+                for (i = 0; i < 40; i++)
+                {
+                    j = 0;
+                    t = 0;
+                    while ((j < 40) && (tabpyr[i][j] != -1) && (t == 0))
+                    {
+                        if (tabpyr[i][j] == x)
+                        {
+                            m = i;
+                            t = 1;
+                        }
+                        j++;
+                    }
+                }
+                resultat = m + 1;
+                break;
+            }
         }
-        return m + 1;
+        return resultat; 
     }
     int L_min(int m)
     {
         int i, j, k, l, x, t;
-        int tabseq[40]; 
+        int tabseq[40];
         k = U(m);
- 
+
         j = 0;
         for (i = 0; i < nbrt; i++)
         {
@@ -498,11 +511,10 @@ public:
                 j++;
             }
         }
-        // ????????? 
-        
+        // ?????????
+
         for (i = j; i < 40; i++)
             tabseq[i] = -1;
-        
 
         /*cout<<"********debu**************"<<endl;
         for(i=0;(i<40)&&(tabseq[i]!=-1);i++)
@@ -1068,7 +1080,7 @@ public:
         {
             for (int j = 0; j < machines[i].nbrt; j++)
             {
-                for (int k = 0; k < nombreMachines; k++)
+                for (int k = 0; k < nombreGammes; k++)
                 {
                     for (int l = 0; l < gammes[k].n; l++)
                     {
@@ -2258,11 +2270,11 @@ public:
         affichage_dans_le_console_bellman_debutFin();
 
         // le calcule du lincoherentes
-        //taches_incoherentes();
+        taches_incoherentes();
 
         // laffichage du resultat de lincoherentes enitiale
         cout << "\n ************ l'affichage du resultat de l'incoherence initiale ************ \n " << endl;
-        //affichage_dans_le_console_incoherentes_enitial();
+        affichage_dans_le_console_incoherentes_enitial();
         /*
         // le calcule de reordonnencement
         reordonner();
