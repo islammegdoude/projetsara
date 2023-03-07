@@ -511,7 +511,6 @@ public:
                 j++;
             }
         }
-        // ?????????
 
         for (i = j; i < 40; i++)
             tabseq[i] = -1;
@@ -627,9 +626,13 @@ public:
         }
         for (i = indice; i < 40; i++)
             seq2[i] = seq2[i + 1];
-        /*cout<<"********seq25*********"<<endl;
+        // ttm7a 1
+        /*
+        cout<<"********seq25*********"<<endl;
         for(i=0;(i<40)&&(seq2[i]!=-1);i++)
-                cout<<seq2[i]<<endl;*/
+                cout<<seq2[i]<<endl;
+        */
+        // ttm7a 1
         //*******************A_et_B****************************
 
         int a[40], b[40];
@@ -660,6 +663,7 @@ public:
         for(i=0;(i<40)&&(a[i]!=-1);i++)
                 cout<<a[i]<<endl;*/
 
+        
         //*************ordonner_A*******************
         int min_r;
         for (i = 0; (i < 40) && (a[i] != -1); i++)
