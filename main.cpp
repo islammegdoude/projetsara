@@ -2,6 +2,9 @@
 #include <fstream>
 #include <string>
 #include <math.h>
+#include <vector>
+#include <iomanip>
+
 using namespace std;
 class Tache
 {
@@ -152,6 +155,9 @@ public:
     int tabpyr[40][40];   // 40 sommet * 40 tache appartien a un sommet//40*40
     int tabpyr_r[40][40]; // 40*40
     int tabpyr_d[40][40]; // 40*40
+
+    vector<int> tab_seq;
+    string chaine;
     // ********* les fonctions ************
     void initialiser_machine(int j)
     {
@@ -385,7 +391,139 @@ public:
             }
         }
     }
-    /* void sequence();*/
+    void sequence()
+    {
+        int i, j, l, n;
+
+        tab_seq.clear();
+
+        cout << "il existe " << nbrs << " sommets:";
+        for (i = 0; i < nbrs; i++)
+        {
+            cout << tabsom[i] << " ";
+        }
+        cout << endl
+             << endl;
+        for (j = 0; (j < 40); j++)
+        {
+            if ((tabpyr_r[0][j] != -1) && (tabpyr_r[0][j] != 0))
+            {
+                cout << tabpyr_r[0][j] << "<";
+                tab_seq.push_back(tabpyr_r[0][j]);
+                //
+            }
+        }
+        cout << tabsom[0] << "<"; //
+        tab_seq.push_back(tabsom[0]);
+        //*************************************************
+        for (i = 0; i < nbrs - 1; i++)
+        {
+
+            if ((tabpyr_d[i][0] != -1) && (tabpyr_d[i][0] != 0))
+            {
+                for (j = 0; j < 40; j++)
+                {
+                    n = 0;
+                    l = 0;
+                    if ((tabpyr_d[i][j] != -1) && (tabpyr_d[i][j] != 0))
+                    {
+
+                        while ((l < 40) && (n == 0))
+                        {
+                            if (tabpyr_d[i][j] == tabpyr_d[i + 1][l])
+                            {
+                                n = 1;
+                            }
+                            l++;
+                        }
+                        if (n == 0)
+                        {
+                            cout << tabpyr_d[i][j] << "<";
+                            tab_seq.push_back(tabpyr_d[i][j]);
+                            //
+                        }
+                    }
+                }
+            }
+            //*************************************************
+            if ((tabpyr_r[i][0] != -1) && (tabpyr_r[i][0] != 0))
+            {
+                for (j = 0; j < 40; j++)
+                {
+                    if ((tabpyr_r[i][j] != -1) && (tabpyr_r[i][j] != 0))
+                    {
+                        n = 0;
+                        l = 0;
+                        while ((l < 40) && (n == 0))
+                        {
+                            if (tabpyr_r[i][j] == tabpyr_r[i + 1][l])
+                            {
+                                n = 1;
+                            }
+                            l++;
+                        }
+                        if (n == 1)
+                        {
+                            cout << tabpyr_r[i][j] << "<";
+                            tab_seq.push_back(tabpyr_r[i][j]);
+                            //
+                        }
+                    }
+                }
+            }
+
+            //*************************************************
+
+            if ((tabpyr_r[i + 1][0] != -1) && (tabpyr[i + 1][0] != 0))
+            {
+                for (j = 0; j < 40; j++)
+                {
+                    n = 0;
+                    l = 0;
+                    if ((tabpyr_r[i + 1][j] != -1) && (tabpyr_r[i + 1][l] != 0))
+                    {
+
+                        while ((l < 40) && (n == 0) && ((tabpyr_r[i][l] != -1) && (tabpyr_r[i][l] != 0)))
+
+                        {
+                            if ((tabpyr_r[i + 1][j] == tabpyr_r[i][l]))
+                            {
+                                n = 1;
+                            }
+                            l++;
+                        }
+                        if (n == 0)
+                        {
+                            cout << tabpyr_r[i + 1][j] << "<";
+                            tab_seq.push_back(tabpyr_r[i + 1][j]);
+                            //
+                        }
+                    }
+                }
+            }
+
+            if (i + 1 != nbrs - 1)
+            {
+                cout << tabsom[i + 1] << "<";
+                tab_seq.push_back(tabsom[i + 1]);
+                //
+            }
+        }
+
+        //*************************************************
+        cout << tabsom[nbrs - 1] << "<";
+        tab_seq.push_back(tabsom[nbrs - 1]);
+        for (j = 0; (j < 40); j++)
+        {
+            if ((tabpyr_d[nbrs - 1][j] != -1) && (tabpyr_d[nbrs - 1][j] != 0))
+            {
+                cout << tabpyr_d[nbrs - 1][j] << "<";
+                tab_seq.push_back(tabpyr_d[nbrs - 1][j]);
+                //
+            }
+        }
+        cout << endl;
+    }
     int info_r(int a)
     {
         int test;
@@ -515,10 +653,6 @@ public:
         for (i = j; i < 40; i++)
             tabseq[i] = -1;
 
-        /*cout<<"********debu**************"<<endl;
-        for(i=0;(i<40)&&(tabseq[i]!=-1);i++)
-                cout<<"h"<<tabseq[i]<<endl;
-        cout<<"**********fin************"<<endl;*/
         //*************ordonner*******************
         int min, min_r, c;
         for (i = 0; (i < 40) && (tabseq[i] != -1); i++)
@@ -626,13 +760,7 @@ public:
         }
         for (i = indice; i < 40; i++)
             seq2[i] = seq2[i + 1];
-        // ttm7a 1
-        /*
-        cout<<"********seq25*********"<<endl;
-        for(i=0;(i<40)&&(seq2[i]!=-1);i++)
-                cout<<seq2[i]<<endl;
-        */
-        // ttm7a 1
+        
         //*******************A_et_B****************************
 
         int a[40], b[40];
@@ -659,9 +787,7 @@ public:
 
         for (i = l; i < 40; i++)
             b[i] = -1;
-        /*cout<<"********A1*********"<<endl;
-        for(i=0;(i<40)&&(a[i]!=-1);i++)
-                cout<<a[i]<<endl;*/
+        
 
         //*************ordonner_A*******************
         int min_r;
@@ -745,24 +871,6 @@ public:
         for (i = j; i < 40; i++)
             seq3[i] = -1;
 
-        /*cout<<"********seq1*********"<<endl;
-                for(i=0;(i<40)&&(seq1[i]!=-1);i++)
-                        cout<<seq1[i]<<endl;
-        cout<<"********seq2*********"<<endl;
-                for(i=0;(i<40)&&(seq2[i]!=-1);i++)
-                        cout<<seq2[i]<<endl;
-        cout<<"********A*********"<<endl;
-                for(i=0;(i<40)&&(a[i]!=-1);i++)
-                        cout<<a[i]<<endl;
-        cout<<"********B*********"<<endl;
-                for(i=0;(i<40)&&(b[i]!=-1);i++)
-                        cout<<b[i]<<endl;
-        cout<<"********Seq22*********"<<endl;
-                for(i=0;(i<40)&&(seq22[i]!=-1);i++)
-                        cout<<seq22[i]<<endl;
-        cout<<"********finale*********"<<endl;
-                for(i=0;(i<40)&&(seq3[i]!=-1);i++)
-                        cout<<seq3[i]<<endl;*/
         //*******************calculer*********************
         if (seq3[0] != m)
         {
@@ -821,6 +929,7 @@ public:
             }
             return tabsom[m];
         }
+        return tabsom[m];
     }
     int premier_sommet(int x)
     {
@@ -847,15 +956,16 @@ public:
             }
             return tabsom[i - 1];
         }
+        return tabsom[i - 1];
     }
-    /*
+
     void seq()
     {
-        foreach (int x, tab_seq)
-            cout << x << "<";
-        cout << endl;
+        for (const auto &x : tab_seq)
+            std::cout << x << "<";
+        std::cout << std::endl;
     }
-    */
+
     int S_dom()
     {
         int i, j, m, o, l, p, k, s, t;
@@ -904,7 +1014,6 @@ public:
             }
         }
         //****************************calculer*********
-        // return 1;
 
         for (i = 0; i < nbrs; i++)
         {
@@ -918,22 +1027,28 @@ public:
             s = s * t;
         }
 
-        /* for(i=0;i<40;i++)
-         {
-             if(tab1[i][0]!=-1)
-            cout<<tab1[i][0]<<"--"<<tab1[i][1]<<endl;
-         }
-         */
-
+        /*
         if (s != 1)
-            cout << "la machine " << num << " est flexible" << endl;
+            cout << "\n la machine " << num << " est flexible" << endl;
         else
-            cout << "la machine " << num << " n'est pas flexible" << endl;
-        cout << "la valeur du S_dom est: ";
-
+            cout << "\n la machine " << num << " n'est pas flexible" << endl;
+        cout << "\n la valeur du S_dom est: ";
+        */
         return s;
     }
-    /* void SeqToChaine(); */
+
+    void SeqToChaine()
+    {
+        int j = 0;
+        chaine = "";
+
+        for (const auto &s : tab_seq)
+        {
+            chaine += std::to_string(s);
+            chaine += "<";
+            j++;
+        }
+    }
 };
 
 class Mainview
@@ -946,10 +1061,12 @@ public:
     int numero = 0;
     int nember_of_incoher_enitial;
     int nember_of_incoher_final;
-    int incoher_min[30][3];
-    int incoher_max[30][3];
+    int incoher_min[100][3];
+    int incoher_max[100][3];
     int Fin_min;
     int Fin_max;
+    int cmax_avant;
+    int cmax_apret;
     int num_page;
     // ******** les fonctions **********
     void initialiser_atelier()
@@ -982,10 +1099,9 @@ public:
         ifstream entree(fileName, ios::in);
 
         entree >> nombreGammes;
-        // cout<<"nbr de gammes: "<<g<<endl;
+        
         entree >> nombreMachines;
-        // cout<<"nbr de machines: "<<z<<endl;
-
+        
         for (int j = 0; j < nombreGammes; j++)
         {
             for (int u = 0; u < nombreMachines; u++)
@@ -995,7 +1111,7 @@ public:
         }
 
         int i = 0, c, j = 0, test, k;
-        // int a,b;
+        
         entree >> c;
         while (i < nombreGammes)
         {
@@ -1003,9 +1119,9 @@ public:
             gammes[i].lis[k].travail = c;
             test = c;
             entree >> gammes[i].lis[k].machine;
-            // gammes[i].lis[k].m=gammes[i].lis[k].m+1;
+            
             entree >> gammes[i].lis[k].p; //
-            // entree >> gammes[i].lis[k].m;//
+            
             j++;
             gammes[i].lis[k].t = j;
             gammes[i].lis[k].prec = 0;
@@ -1017,9 +1133,7 @@ public:
                 k++;
                 gammes[i].lis[k].travail = c;
                 entree >> gammes[i].lis[k].machine;
-                // gammes[i].lis[k].m=gammes[i].lis[k].m+1;
-                entree >> gammes[i].lis[k].p; //
-                // entree >> gammes[i].lis[k].m;//
+                entree >> gammes[i].lis[k].p; 
                 j++;
                 gammes[i].lis[k].t = j;
                 gammes[i].lis[k].prec = j - 1;
@@ -1099,7 +1213,6 @@ public:
         for (int j = 0; j < nombreMachines; j++)
         {
             for (int u = 0; u < 100; u++)
-                // machines[j].tab[u].t=0;
                 machines[j].tab[u].t = 0;
         }
         int k;
@@ -1129,7 +1242,7 @@ public:
         k = 0;
         m = 0;
 
-        for (i = 0; i < 30; i++)
+        for (i = 0; i < 100; i++)
         {
             for (j = 0; j < 3; j++)
             {
@@ -1163,11 +1276,11 @@ public:
         //***********ordonner les 2 tableaux*****************
         int max, o, a, b, c, max_ind;
         //*********incoher_min****************
-        for (l = 0; l < 30; l++)
+        for (l = 0; l < 100; l++)
         {
             max = incoher_min[l][2];
             max_ind = l;
-            for (o = l + 1; o < 30; o++)
+            for (o = l + 1; o < 100; o++)
             {
                 if (max < incoher_min[o][2])
                 {
@@ -1190,11 +1303,11 @@ public:
         }
 
         //*********incoher_max****************
-        for (l = 0; l < 30; l++)
+        for (l = 0; l < 100; l++)
         {
             max = incoher_max[l][2];
             max_ind = l;
-            for (o = l + 1; o < 30; o++)
+            for (o = l + 1; o < 100; o++)
             {
                 if (max < incoher_max[o][2])
                 {
@@ -1219,47 +1332,38 @@ public:
     // la reordonnoncement
     int travail(int x)
     {
+        int test = 0;
         for (int i = 0; i < nombreGammes; i++)
         {
             for (int j = 0; j < gammes[i].n; j++)
             {
                 if (gammes[i].lis[j].t == x)
-                    return ((gammes[i].lis[j].travail) - 1);
+                {
+                    test = ((gammes[i].lis[j].travail) - 1);
+                    break;
+                }
             }
         }
+        return test;
     }
     int pos(int x)
     {
+        int test = 0;
         for (int i = 0; i < nombreGammes; i++)
         {
             for (int j = 0; j < gammes[i].n; j++)
             {
                 if (gammes[i].lis[j].t == x)
-                    return (j);
+                {
+                    test = j;
+                    break;
+                }
             }
         }
+        return test;
     }
     void calculer_debut_fin_machine(int x)
     {
-        // gamme to machine
-        /* for(int i=0;i<g;i++)
-          {
-              for(int j=0;j<gammes[i].n;j++)
-              {
-                  for(int l=0;l<z;l++)
-                  {
-                      for(int k=0;k<machines[l].nbrt;k++)
-                      {
-                          if((machines[l].tab[k].t)==(gammes[i].lis[j].t))
-                          {
-                              machines[l].tab[k]=gammes[i].lis[j];
-                          }
-                      }
-
-
-                  }
-              }
-          }*/
 
         for (int i = 0; i < nombreGammes; i++)
         {
@@ -1275,24 +1379,13 @@ public:
             }
         }
 
-        /*  Machine t;
-          t=machines[x-1];*/
-
-        // calculer
-        // cout<<"machine"<<x<<endl;
+        // calculer       
         machines[x - 1].sommet_pyramide();
         machines[x - 1].ordre_r();
         machines[x - 1].ordre_d();
         machines[x - 1].machine_calculer();
-        /* t.sommet_pyramide();
-         t.ordre_r();
-         t.ordre_d();
-         t.machine_calculer();
-         machines[x-1]=t;*/
 
         // machine to gamme
-        // for(int i=0;i<z;i++)
-        //{
         for (int j = 0; j < machines[x - 1].nbrt; j++)
         {
             for (int k = 0; k < nombreGammes; k++)
@@ -1304,89 +1397,74 @@ public:
                 }
             }
         }
-        //}
     }
     bool diminuer_Fmin(int i, int x)
     {
 
-        int p;
-        p = x;
+        int p = x;
         bool test;
         test = false;
         int d1, m;
-        // m=gammes[travail(i)].m(i);
-        // cout<<m<<"avant"<<endl;
-        // m=gammes[travail(i)].m(i)-1;
-        // cout<<m<<"apres"<<endl;
         d1 = gammes[travail(i)].lis[pos(i)].d;
-        // p=gammes[travail(i)].d(machines[m].premier_sommet(i));
+
         while ((((gammes[travail(i)].r(i)) + (gammes[travail(i)].p(i))) <= ((gammes[travail(i)].d(i)) - p)) && (!test))
         {
             gammes[travail(i)].lis[pos(i)].d = (gammes[travail(i)].lis[pos(i)].d) - p;
-            // gammes[travail(i)].lis[pos(i)].d=p;
             calculer_debut_fin_machine(gammes[travail(i)].machine(i));
             if ((gammes[travail(i)].Fmin(i)) <= (gammes[travail(i)].Smin(i + 1)))
             {
                 test = true;
                 taches_incoherentes();
-                return true; // cout<<"ffff"<<endl;
+                return true;
             }
             p = (gammes[travail(i)].Fmin(i)) - (gammes[travail(i)].Smin(i + 1));
             // p--;
         }
-        /* if(test==false)
-             return false;*/
         if (test == false || ((gammes[travail(i)].r(i)) + (gammes[travail(i)].p(i)) > (gammes[travail(i)].d(i)) - p))
         {
             gammes[travail(i)].lis[pos(i)].d = d1;
-            // cout<<"yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"<<endl;
-            int m; // cout<<x<<"jj"<<machines[x].nbrt<<endl;
+            int m;
 
             m = gammes[travail(i)].machine(i);
-            // cout<<m<<"avant"<<endl;
             m = gammes[travail(i)].machine(i) - 1;
-            // cout<<m<<"apres"<<endl;
 
-            // cout<<"yyy"<<m<<endl;
-            int t[40], t1[40][2], t2[40], k = 0, l = 0, n = 0, a, b, max, max_ind, min, min_ind;
+            int t[40], t1[100][2], t2[40], k = 0, l = 0, n = 0, a, b, max, max_ind, min, min_ind;
 
             for (int j = 0; j < 40; j++)
                 t[j] = -1;
 
-            for (int j = 0; j < 40; j++)
+            for (int j = 0; j < 100; j++)
                 for (int o = 0; o < 2; o++)
                     t1[j][o] = -1;
 
             //*******************u(k)<u(i)et v(k)>=u(k)****************************************
             for (int j = 0; j < machines[m].nbrt; j++)
             {
-                // cout<<machines[x].U(i)<<"ee"<<machines[x].U(machines[x].tab[j].t)<<"hh"<<machines[x].tab[j].t<<endl;
                 if ((machines[m].U(machines[m].tab[j].t) < machines[m].U(i)) && (machines[m].V(machines[m].tab[j].t) >= machines[m].U(i)))
                 {
-                    t[k] = machines[m].tab[j].t; // cout<<t[k]<<endl;
+                    t[k] = machines[m].tab[j].t;
                     k++;
                 }
             }
             //*******************recherche dans incoher_min u(k)<u(i)etv(k)>=u(k)****************************************
             for (k = 0; k < 40; k++)
             {
-                for (int j = 0; j < 40; j++)
+                for (int j = 0; j < 100; j++)
                 {
                     if ((t[k] == incoher_min[j][l + 1]) && (t[k] != -1))
                     {
                         t1[n][0] = t[k];
                         t1[n][1] = incoher_min[j][l + 2];
-                        // cout<<t1[n]<<"oo"<<incoher_min[j][l+1]<<"pp"<<t[k]<<"ll"<<incoher_min[j][l+2]<<endl;
                         n++;
                     }
                 }
             }
             //*******************ordonner u(k)<u(i) et v(k)>=u(k)****************************************
-            for (l = 0; l < 40; l++)
+            for (l = 0; l < 100; l++)
             {
                 max = t1[l][1];
                 max_ind = l;
-                for (int o = l + 1; o < 40; o++)
+                for (int o = l + 1; o < 100; o++)
                 {
                     if (max < t1[o][1])
                     {
@@ -1405,17 +1483,15 @@ public:
             }
             //******************************--2cas--*************************************
             //*******************recherche dans les gammes  u(k)<u(i)etv(k)>=u(k)****************************************
-            // cout<<"raouf"<<endl;
             for (int j = 0; j < 40; j++)
                 t2[j] = t[j];
 
             for (l = 0; (l < 40) && t2[l] != -1; l++)
             {
-                min = gammes[travail(t2[l])].lis[(gammes[travail(t2[l])].n) - 1].Fmin; // cout<<"uu"<<min<<endl;
+                min = gammes[travail(t2[l])].lis[(gammes[travail(t2[l])].n) - 1].Fmin;
                 min_ind = l;
                 for (int o = l + 1; (o < 40) && t2[o] != -1; o++)
                 {
-                    // cout<<gammes[travail(t2[o])].lis[(gammes[travail(t2[o])].n)-1].Fmin;
                     if (min > gammes[travail(t2[o])].lis[(gammes[travail(t2[o])].n) - 1].Fmin)
                     {
                         min = gammes[travail(t2[o])].lis[(gammes[travail(t2[o])].n) - 1].Fmin;
@@ -1432,62 +1508,56 @@ public:
             int r1, test_r;
             k = 0;
             verif = false;
-                if (verif == false || k == 0)
+            if (verif == false || k == 0)
+            {
+                while ((t2[k] != -1) && !verif)
                 {
-                    
-                    while ((t2[k] != -1) && !verif)
-                    {
-                        test1 = false;
-                        r1 = gammes[travail(t2[k])].r(t2[k]);
-                        test_r = (gammes[travail(i)].r(i /*machines[m].premier_sommet(i)*/)) + 1;
+                    test1 = false;
+                    r1 = gammes[travail(t2[k])].r(t2[k]);
+                    test_r = (gammes[travail(i)].r(i)) + 1;
 
-                        while (((test_r + (gammes[travail(t2[k])].p(t2[k]))) < (gammes[travail(t2[k])].d(t2[k]))) && !test1)
+                    while (((test_r + (gammes[travail(t2[k])].p(t2[k]))) < (gammes[travail(t2[k])].d(t2[k]))) && !test1)
+                    {
+                        gammes[travail(t2[k])].lis[pos(t2[k])].r = test_r;
+                        calculer_debut_fin_machine(gammes[travail(i)].machine(i));
+                        if ((gammes[travail(i)].Fmin(i)) <= (gammes[travail(i)].Smin(i + 1)))
                         {
-                            gammes[travail(t2[k])].lis[pos(t2[k])].r = test_r;
-                            calculer_debut_fin_machine(gammes[travail(i)].machine(i));
-                            if ((gammes[travail(i)].Fmin(i)) <= (gammes[travail(i)].Smin(i + 1)))
-                            {
-                                test1 = true;
-                                taches_incoherentes();
-                            }
-                            else
-                                test_r = test_r + 1;
-                        }
-                        if (test1 == true)
-                        {
-                            verif = true;
+                            test1 = true;
+                            taches_incoherentes();
                         }
                         else
-                        {
-                            gammes[travail(t2[k])].lis[pos(t2[k])].r = r1;
-                            k++;
-                        }
+                            test_r = test_r + 1;
                     }
-                    //**
-                    test = verif ;
+                    if (test1 == true)
+                    {
+                        verif = true;
+                    }
+                    else
+                    {
+                        gammes[travail(t2[k])].lis[pos(t2[k])].r = r1;
+                        k++;
+                    }
                 }
-                //******fin_2cas**************
+                test = verif;
+            }
+            //******fin_2cas**************
             //**fin sinon
-            
         }
-        return test ; 
+        return test;
         //******fin********************
     }
     void augmenter_Smin(int i, int x)
     {
 
-        int p;
-        p = x;
+        int p = x;
         bool test1, test2;
         test1 = false;
         test2 = false;
         int s = gammes[travail(i)].lis[pos(i)].r;
         int m = gammes[travail(i)].machine(i) - 1;
-        // p=gammes[travail(i)].d(machines[m].premier_sommet(i))+1;
         while (((gammes[travail(i)].r(i)) + (gammes[travail(i)].p(i)) + p <= (gammes[travail(i)].d(i))) && (!test1))
         {
             gammes[travail(i)].lis[pos(i)].r = (gammes[travail(i)].lis[pos(i)].r) + p;
-            // gammes[travail(i)].lis[pos(i)].r=p;
             calculer_debut_fin_machine(gammes[travail(i)].machine(i));
             if ((gammes[travail(i)].Fmin(i - 1)) <= (gammes[travail(i)].Smin(i)))
             {
@@ -1496,52 +1566,49 @@ public:
             }
             else
                 p = (gammes[travail(i)].Fmin(i - 1)) - (gammes[travail(i)].Smin(i));
-            // p++;
         }
-        bool trouve = false; // gammes[travail(i)].lis[pos(i)].r=s;
+        bool trouve = false;
         if (((gammes[travail(i)].r(i)) + (gammes[travail(i)].p(i)) + p > (gammes[travail(i)].d(i))) && (test1 == false))
         {
 
-            int m = gammes[travail(i)].machine(i) - 1; // cout<<x<<"jj"<<machines[x].nbrt<<endl;
-            int t[40], t1[40][2], t2[40], k = 0, l = 0, n = 0, a, b, max, max_ind, min, min_ind;
+            int m = gammes[travail(i)].machine(i) - 1;
+            int t[40], t1[100][2], t2[40], k = 0, l = 0, n = 0, a, b, max, max_ind, min, min_ind;
 
             for (int j = 0; j < 40; j++)
                 t[j] = -1;
 
-            for (int j = 0; j < 40; j++)
+            for (int j = 0; j < 100; j++)
                 for (int o = 0; o < 2; o++)
                     t1[j][o] = -1;
 
             //*******************u(k)<u(i)etv(k)>=u(k)****************************************
             for (int j = 0; j < machines[m].nbrt; j++)
             {
-                // cout<<machines[x].U(i)<<"ee"<<machines[x].U(machines[x].tab[j].t)<<"hh"<<machines[x].tab[j].t<<endl;
                 if ((machines[m].U(machines[m].tab[j].t) < machines[m].U(i)) && (machines[m].V(machines[m].tab[j].t) >= machines[m].U(i)))
                 {
-                    t[k] = machines[m].tab[j].t; // cout<<t[k]<<endl;
+                    t[k] = machines[m].tab[j].t;
                     k++;
                 }
             }
             //*******************recherche dans incoher_min u(k)<u(i)etv(k)>=u(k)****************************************
             for (k = 0; k < 40; k++)
             {
-                for (int j = 0; j < 40; j++)
+                for (int j = 0; j < 100; j++)
                 {
                     if ((t[k] == incoher_min[j][0]) && (t[k] != -1))
                     {
                         t1[n][0] = t[k];
                         t1[n][1] = incoher_min[j][l + 2];
-                        // cout<<t1[n]<<"oo"<<incoher_min[j][l+1]<<"pp"<<t[k]<<"ll"<<incoher_min[j][l+2]<<endl;
                         n++;
                     }
                 }
             }
             //*******************ordonner u(k)<u(i)etv(k)>=u(k)****************************************
-            for (l = 0; l < 40; l++)
+            for (l = 0; l < 100; l++)
             {
                 max = t1[l][1];
                 max_ind = l;
-                for (int o = l + 1; o < 40; o++)
+                for (int o = l + 1; o < 100; o++)
                 {
                     if (max < t1[o][1])
                     {
@@ -1561,17 +1628,15 @@ public:
 
             //******************************--2cas--*************************************
             //*******************recherche dans les gammes  u(k)<u(i)etv(k)>=u(k)****************************************
-            // cout<<"raouf"<<endl;
             for (int j = 0; j < 40; j++)
                 t2[j] = t[j];
 
             for (l = 0; (l < 40) && t2[l] != -1; l++)
             {
-                max = gammes[travail(t2[l])].lis[(gammes[travail(t2[l])].n) - 1].Fmin; // cout<<"uu"<<min<<endl;
+                max = gammes[travail(t2[l])].lis[(gammes[travail(t2[l])].n) - 1].Fmin;
                 max_ind = l;
                 for (int o = l + 1; (o < 40) && t2[o] != -1; o++)
                 {
-                    // cout<<gammes[travail(t2[o])].lis[(gammes[travail(t2[o])].n)-1].Fmin;
                     if (max < gammes[travail(t2[o])].lis[(gammes[travail(t2[o])].n) - 1].Fmin)
                     {
                         max = gammes[travail(t2[o])].lis[(gammes[travail(t2[o])].n) - 1].Fmin;
@@ -1589,66 +1654,54 @@ public:
             int d1, test_d;
             k = 0;
             verif = false;
-            if (verif == true)
-                trouve = true;
-            else
+            trouve = false;
+            if (verif == false || k == 0)
             {
-                // trouve=false;
-                if (verif == false || k == 0)
+                while ((t2[k] != -1) && !verif)
                 {
-                    verif = false;
-                    k = 0;
 
-                    while ((t2[k] != -1) && !verif)
+                    test3 = false;
+                    d1 = gammes[travail(t2[k])].d(t2[k]);
+                    test_d = (gammes[travail(i)].d(machines[m].premier_sommet(i))) - 1;
+
+                    while ((((gammes[travail(t2[k])].r(t2[k])) + (gammes[travail(t2[k])].p(t2[k]))) < test_d) && !test3)
                     {
-
-                        test3 = false;
-                        d1 = gammes[travail(t2[k])].d(t2[k]);
-                        test_d = (gammes[travail(i)].d(machines[m].premier_sommet(i))) - 1;
-                        // cout<<test_r<<endl;
-
-                        while ((((gammes[travail(t2[k])].r(t2[k])) + (gammes[travail(t2[k])].p(t2[k]))) < test_d) && !test3)
+                        gammes[travail(t2[k])].lis[pos(t2[k])].d = test_d;
+                        calculer_debut_fin_machine(gammes[travail(i)].machine(i));
+                        if ((gammes[travail(i)].Fmin(i - 1)) <= (gammes[travail(i)].Smin(i)))
                         {
-                            gammes[travail(t2[k])].lis[pos(t2[k])].d = test_d;
-                            calculer_debut_fin_machine(gammes[travail(i)].machine(i));
-                            if ((gammes[travail(i)].Fmin(i - 1)) <= (gammes[travail(i)].Smin(i)))
-                            {
-                                test3 = true;
-                                taches_incoherentes();
-                            }
-                            else
-                            {
-                                test_d = test_d - 1;
-                            }
-                        }
-                        if (test3 == true)
-                        {
-                            verif = true;
+                            test3 = true;
+                            taches_incoherentes();
                         }
                         else
                         {
-                            gammes[travail(t2[k])].lis[pos(t2[k])].d = d1;
-                            k++;
+                            test_d = test_d - 1;
                         }
                     }
-
-                    if (verif == true)
-                        trouve = true;
+                    if (test3 == true)
+                    {
+                        verif = true;
+                    }
                     else
-                        trouve = false;
-
-                    //****************************************
+                    {
+                        gammes[travail(t2[k])].lis[pos(t2[k])].d = d1;
+                        k++;
+                    }
                 }
+
+                if (verif == true)
+                    trouve = true;
+                else
+                    trouve = false;
             }
         }
         if (((gammes[travail(i)].r(i)) + (gammes[travail(i)].p(i)) + p > (gammes[travail(i)].d(i))) && (test1 == false) && (trouve == false))
         {
             int m = gammes[travail(i)].machine(i) - 1;
             gammes[travail(i)].lis[pos(i)].r = s;
-            // gammes[travail(i)].lis[pos(i)].r=gammes[travail(i)].r(machines[m].premier_sommet(i));
             while (((gammes[travail(i)].Fmin(i - 1)) > (gammes[travail(i)].Smin(i))) && (!test2))
             {
-                gammes[travail(i)].lis[pos(i)].r = (gammes[travail(i)].lis[pos(i)].r) + p; // cout<<gammes[travail(i)].lis[pos(i)].r<<endlp;
+                gammes[travail(i)].lis[pos(i)].r = (gammes[travail(i)].lis[pos(i)].r) + p;
                 gammes[travail(i)].lis[pos(i)].d = (gammes[travail(i)].lis[pos(i)].r) + (gammes[travail(i)].lis[pos(i)].p);
                 calculer_debut_fin_machine(gammes[travail(i)].machine(i));
                 if ((gammes[travail(i)].Fmin(i - 1)) <= (gammes[travail(i)].Smin(i)))
@@ -1677,54 +1730,50 @@ public:
             {
                 test = true;
                 taches_incoherentes();
-                return true; // cout<<"ffff"<<endl;
+                return true;
             }
             t = (gammes[travail(i)].Fmax(i)) - (gammes[travail(i)].Smax(i + 1));
         }
         if (test == false)
-        // return false;
         {
             gammes[travail(i)].lis[pos(i)].d = d1;
-            // cout<<"yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"<<endl;
-            int m = gammes[travail(i)].machine(i) - 1; // cout<<x<<"jj"<<machines[x].nbrt<<endl;
-            int t[40], t1[40][2], t2[40], k = 0, l = 0, n = 0, a, b, max, max_ind, min, min_ind;
+            int m = gammes[travail(i)].machine(i) - 1;
+            int t[40], t1[100][2], t2[40], k = 0, l = 0, n = 0, a, b, max, max_ind, min, min_ind;
 
             for (int j = 0; j < 40; j++)
                 t[j] = -1;
 
-            for (int j = 0; j < 40; j++)
+            for (int j = 0; j < 100; j++)
                 for (int o = 0; o < 2; o++)
                     t1[j][o] = -1;
             //*******************u(k)<=v(i)<=v(k)et Dk>Di****************************************
             for (int j = 0; j < machines[m].nbrt; j++)
             {
-
                 if ((machines[m].U(machines[m].tab[j].t) <= machines[m].V(i)) && (machines[m].V(machines[m].tab[j].t) >= machines[m].V(i)) && ((machines[m].info_d(machines[m].tab[j].t) > (machines[m].info_d(i)))))
                 {
-                    t[k] = machines[m].tab[j].t; // cout<<t[k]<<endl;
+                    t[k] = machines[m].tab[j].t;
                     k++;
                 }
             }
             //*******************recherche dans incoher_max u(k)<=v(i)<=v(k)et Dk>Di ****************************************
             for (k = 0; k < 40; k++)
             {
-                for (int j = 0; j < 40; j++)
+                for (int j = 0; j < 100; j++)
                 {
                     if ((t[k] == incoher_max[j][l + 1]) && (t[k] != -1))
                     {
                         t1[n][0] = t[k];
                         t1[n][1] = incoher_max[j][l + 2];
-                        // cout<<t1[n]<<"oo"<<incoher_max[j][l+1]<<"pp"<<t[k]<<"ll"<<incoher_max[j][l+2]<<endl;
                         n++;
                     }
                 }
             }
             //*******************ordonner u(k)<u(i)etv(k)>=u(k)****************************************
-            for (l = 0; l < 40; l++)
+            for (l = 0; l < 100; l++)
             {
                 max = t1[l][1];
                 max_ind = l;
-                for (int o = l + 1; o < 40; o++)
+                for (int o = l + 1; o < 100; o++)
                 {
                     if (max < t1[o][1])
                     {
@@ -1744,17 +1793,15 @@ public:
 
             //******************************--2cas--*************************************
             //*******************recherche dans les gammes  u(k)<=v(i)<=v(k)et Dk>Di****************************************
-            // cout<<"raouf"<<endl;
             for (int j = 0; j < 40; j++)
                 t2[j] = t[j];
 
             for (l = 0; (l < 40) && t2[l] != -1; l++)
             {
-                min = gammes[travail(t2[l])].lis[(gammes[travail(t2[l])].n) - 1].Fmax; // cout<<"uu"<<min<<endl;
+                min = gammes[travail(t2[l])].lis[(gammes[travail(t2[l])].n) - 1].Fmax;
                 min_ind = l;
                 for (int o = l + 1; (o < 40) && t2[o] != -1; o++)
                 {
-                    // cout<<gammes[travail(t2[o])].lis[(gammes[travail(t2[o])].n)-1].Fmin;
                     if (min > gammes[travail(t2[o])].lis[(gammes[travail(t2[o])].n) - 1].Fmax)
                     {
                         min = gammes[travail(t2[o])].lis[(gammes[travail(t2[o])].n) - 1].Fmax;
@@ -1770,88 +1817,44 @@ public:
             int r1, test_r;
             k = 0;
             verif = false;
-            /* while((t1[k][0]!=-1)&&!verif)
-              {
-
-                  test1=false;
-                  r1=gammes[travail(t1[k][0])].r(t1[k][0]);
-                  test_r=(gammes[travail(i)].r(machines[m].dernier_sommet(i)))+1;
-                  //cout<<test_r<<endl;
-
-                  while(((test_r+(gammes[travail(t1[k][0])].p(t1[k][0])))<(gammes[travail(t1[k][0])].d(t1[k][0])))&&!test1 )
-                  {
-                      gammes[travail(t1[k][0])].lis[pos(t1[k][0])].r=test_r;
-                      calculer_debut_fin_machine(gammes[travail(i)].m(i));
-                      if((gammes[travail(i)].Fmax(i))<=(gammes[travail(i)].Smax(i+1)))
-                      {
-                          test1=true;
-                          taches_incoherentes();
-                      }
-                      else
-                      { test_r=test_r+((gammes[travail(i)].Fmax(i))-(gammes[travail(i)].Smax(i+1)));}
-                  }
-                  if(test1==true)
-                  {
-                      verif=true;
-                  }
-                  else
-                  {
-                      gammes[travail(t1[k][0])].lis[pos(t1[k][0])].r=r1;
-                      k++;
-                  }
-
-              }*/
             //*****fin_1cas************
-            if (verif == true)
+            if (verif == false || k == 0)
             {
-                return true;
-            }
-            else
-            {
-                return false;
-                if (verif == false || k == 0)
-                {
-                    //**
-                    verif = false;
-                    k = 0;
-                    while ((t2[k] != -1) && !verif)
-                    {
-                        test1 = false;
-                        r1 = gammes[travail(t2[k])].r(t2[k]);
-                        test_r = (gammes[travail(i)].r(machines[m].dernier_sommet(i))) + 1;
 
-                        while (((test_r + (gammes[travail(t2[k])].p(t2[k]))) < (gammes[travail(t2[k])].d(t2[k]))) && !test1)
+                verif = false;
+                k = 0;
+                while ((t2[k] != -1) && !verif)
+                {
+                    test1 = false;
+                    r1 = gammes[travail(t2[k])].r(t2[k]);
+                    test_r = (gammes[travail(i)].r(machines[m].dernier_sommet(i))) + 1;
+
+                    while (((test_r + (gammes[travail(t2[k])].p(t2[k]))) < (gammes[travail(t2[k])].d(t2[k]))) && !test1)
+                    {
+                        gammes[travail(t2[k])].lis[pos(t2[k])].r = test_r;
+                        calculer_debut_fin_machine(gammes[travail(i)].machine(i));
+                        if ((gammes[travail(i)].Fmax(i)) <= (gammes[travail(i)].Smax(i + 1)))
                         {
-                            gammes[travail(t2[k])].lis[pos(t2[k])].r = test_r;
-                            calculer_debut_fin_machine(gammes[travail(i)].machine(i));
-                            if ((gammes[travail(i)].Fmax(i)) <= (gammes[travail(i)].Smax(i + 1)))
-                            {
-                                test1 = true;
-                                taches_incoherentes();
-                            }
-                            else
-                                test_r = test_r + 1;
-                        }
-                        if (test1 == true)
-                        {
-                            verif = true;
+                            test1 = true;
+                            taches_incoherentes();
                         }
                         else
-                        {
-                            gammes[travail(t2[k])].lis[pos(t2[k])].r = r1;
-                            k++;
-                        }
+                            test_r = test_r + 1;
                     }
-                    //**
-                    if (verif == true)
-                        return true;
+                    if (test1 == true)
+                    {
+                        verif = true;
+                    }
                     else
-                        return false;
+                    {
+                        gammes[travail(t2[k])].lis[pos(t2[k])].r = r1;
+                        k++;
+                    }
                 }
-
-            } //***
+                test = verif;
+            }
         }
-        //}
+        return test;
     }
     void augmenter_Smax(int i, int x)
     {
@@ -1878,14 +1881,13 @@ public:
         if (((gammes[travail(i)].r(i)) + (gammes[travail(i)].p(i)) + t > (gammes[travail(i)].d(i))) && (test1 == false))
         {
 
-            // cout<<"yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"<<endl;
-            int m = gammes[travail(i)].machine(i) - 1; // cout<<x<<"jj"<<machines[x].nbrt<<endl;
-            int t[40], t1[40][2], t2[40], k = 0, l = 0, n = 0, a, b, max, max_ind, min, min_ind;
+            int m = gammes[travail(i)].machine(i) - 1;
+            int t[40], t1[100][2], t2[40], k = 0, l = 0, n = 0, a, b, max, max_ind, min, min_ind;
 
             for (int j = 0; j < 40; j++)
                 t[j] = -1;
 
-            for (int j = 0; j < 40; j++)
+            for (int j = 0; j < 100; j++)
                 for (int o = 0; o < 2; o++)
                     t1[j][o] = -1;
             //*******************u(k)<=v(i)<=v(k)et Dk>Di****************************************
@@ -1894,30 +1896,29 @@ public:
 
                 if ((machines[m].U(machines[m].tab[j].t) <= machines[m].V(i)) && (machines[m].V(machines[m].tab[j].t) >= machines[m].V(i)) && ((machines[m].info_d(machines[m].tab[j].t) > (machines[m].info_d(i)))))
                 {
-                    t[k] = machines[m].tab[j].t; // cout<<t[k]<<endl;
+                    t[k] = machines[m].tab[j].t;
                     k++;
                 }
             }
             //*******************recherche dans incoher_max u(k)<=v(i)<=v(k)et Dk>Di ****************************************
             for (k = 0; k < 40; k++)
             {
-                for (int j = 0; j < 40; j++)
+                for (int j = 0; j < 100; j++)
                 {
                     if ((t[k] == incoher_max[j][0]) && (t[k] != -1))
                     {
                         t1[n][0] = t[k];
                         t1[n][1] = incoher_max[j][l + 2];
-                        // cout<<t1[n]<<"oo"<<incoher_max[j][l+1]<<"pp"<<t[k]<<"ll"<<incoher_max[j][l+2]<<endl;
                         n++;
                     }
                 }
             }
             //*******************ordonner u(k)<u(i)etv(k)>=u(k)****************************************
-            for (l = 0; l < 40; l++)
+            for (l = 0; l < 100; l++)
             {
                 max = t1[l][1];
                 max_ind = l;
-                for (int o = l + 1; o < 40; o++)
+                for (int o = l + 1; o < 100; o++)
                 {
                     if (max < t1[o][1])
                     {
@@ -1937,17 +1938,15 @@ public:
 
             //******************************--2cas--*************************************
             //*******************recherche dans les gammes  u(k)<=v(i)<=v(k)et Dk>Di****************************************
-            // cout<<"raouf"<<endl;
             for (int j = 0; j < 40; j++)
                 t2[j] = t[j];
 
             for (l = 0; (l < 40) && t2[l] != -1; l++)
             {
-                max = gammes[travail(t2[l])].lis[(gammes[travail(t2[l])].n) - 1].Fmax; // cout<<"uu"<<min<<endl;
+                max = gammes[travail(t2[l])].lis[(gammes[travail(t2[l])].n) - 1].Fmax;
                 max_ind = l;
                 for (int o = l + 1; (o < 40) && t2[o] != -1; o++)
                 {
-                    // cout<<gammes[travail(t2[o])].lis[(gammes[travail(t2[o])].n)-1].Fmin;
                     if (max < gammes[travail(t2[o])].lis[(gammes[travail(t2[o])].n) - 1].Fmax)
                     {
                         max = gammes[travail(t2[o])].lis[(gammes[travail(t2[o])].n) - 1].Fmax;
@@ -1958,43 +1957,11 @@ public:
                 t2[max_ind] = t2[l];
                 t2[l] = a;
             }
-            //************************rani hena************************************
 
             bool verif, test4;
             int d1, test_d;
             k = 0;
             verif = false;
-            /*while((t1[k][0]!=-1)&&!verif)
-            {
-
-                test4=false;
-                d1=gammes[travail(t1[k][0])].d(t1[k][0]);
-                test_d=(gammes[travail(i)].d(i))-1;
-                //cout<<test_r<<endl;
-
-                while((((gammes[travail(t1[k][0])].r(t1[k][0]))+(gammes[travail(t1[k][0])].p(t1[k][0])))<test_d)&&(test_d>gammes[travail(i)].d(machines[m].dernier_sommet(i)))&&!test4 )
-                {
-                    gammes[travail(t1[k][0])].lis[pos(t1[k][0])].d=test_d;
-                    calculer_debut_fin_machine(gammes[travail(i)].m(i));
-                    if((gammes[travail(i)].Fmax(i-1))<=(gammes[travail(i)].Smax(i)))
-                    {
-                        test4=true;
-                        taches_incoherentes();
-                    }
-                    else
-                    { test_d=test_d-1;}
-                }
-                if(test4==true)
-                {
-                    verif=true;
-                }
-                else
-                {
-                    gammes[travail(t1[k][0])].lis[pos(t1[k][0])].d=d1;
-                    k++;
-                }
-
-            }*/
             if (verif == true)
                 test3 = true;
             else
@@ -2011,7 +1978,6 @@ public:
                         test4 = false;
                         d1 = gammes[travail(t2[k])].d(t2[k]);
                         test_d = (gammes[travail(i)].d(i)) - 1;
-                        // cout<<test_r<<endl;
 
                         while ((((gammes[travail(t2[k])].r(t2[k])) + (gammes[travail(t2[k])].p(t2[k]))) < test_d) && (test_d > gammes[travail(i)].d(machines[m].dernier_sommet(i))) && !test4)
                         {
@@ -2042,10 +2008,7 @@ public:
                     else
                         test3 = false;
                 }
-
-                //****************************************
-
-            } ////89
+            }
         }
 
         if (((gammes[travail(i)].r(i)) + (gammes[travail(i)].p(i)) + t > (gammes[travail(i)].d(i))) && (test1 == false) && (test3 == false))
@@ -2054,7 +2017,7 @@ public:
             gammes[travail(i)].lis[pos(i)].r = r1;
             while (((gammes[travail(i)].Fmax(i - 1)) > (gammes[travail(i)].Smax(i))) && (!test2))
             {
-                gammes[travail(i)].lis[pos(i)].r = (gammes[travail(i)].lis[pos(i)].r) + t; // cout<<gammes[travail(i)].lis[pos(i)].r<<endl;
+                gammes[travail(i)].lis[pos(i)].r = (gammes[travail(i)].lis[pos(i)].r) + t;
                 gammes[travail(i)].lis[pos(i)].d = (gammes[travail(i)].lis[pos(i)].r) + (gammes[travail(i)].lis[pos(i)].p);
                 calculer_debut_fin_machine(gammes[travail(i)].machine(i));
                 if ((gammes[travail(i)].Fmax(i - 1)) <= (gammes[travail(i)].Smax(i)))
@@ -2071,75 +2034,71 @@ public:
     {
         int i = 0, j = 0, l = 0, k = 0;
         bool test, test2;
-        // cout<<endl<<endl<<"les test: "<<endl<<endl;
-        // test 
-        /*
-        for (l = 0 ; l < 30 ; l++)
-        {
-            // incoher_max[l][k] != -1
-            test2 = diminuer_Fmax(incoher_max[l][k], incoher_max[l][k + 2]);
 
-            if (!test2)
-            {
-                cout << "\n islam max \n";
-                augmenter_Smax(incoher_max[l][k + 1], incoher_max[l][k + 2]);
-            }
-        }
-        while (incoher_min[i][j] != -1)
+        int counter_min = 0;
+        int counter_max = 0;
+        while (incoher_min[i][j] != -1 && counter_min <= 100)
         {
+            counter_min++;
+
             test = diminuer_Fmin(incoher_min[i][j], incoher_min[i][j + 2]);
-
             if (!test)
             {
-                cout << "\n islam min \n";
+                // cout<<"isalm min ";
                 augmenter_Smin(incoher_min[i][j + 1], incoher_min[i][j + 2]);
             }
         }
-        */
-        
-        int counter_min = 0 ;
-        int counter_max = 0 ;
-        while (incoher_min[i][j] != -1 || incoher_max[l][k] != -1)
+        while (incoher_max[l][k] != -1 && counter_max <= 100)
         {
-            if(counter_max == 30 || counter_max == 30){
-                break;
-            }
-            if (incoher_min[i][j] != -1)
+            // cout<<"isalm max";
+            //  if(incoher_max[l][k]!=-1)
+            counter_max++;
+            test2 = diminuer_Fmax(incoher_max[l][k], incoher_max[l][k + 2]);
+            if (!test2)
             {
-                counter_min++;
-                test = diminuer_Fmin(incoher_min[i][j], incoher_min[i][j + 2]);
-
-                if (!test)
-                {
-                    //cout << "\n islam min \n";
-                    augmenter_Smin(incoher_min[i][j + 1], incoher_min[i][j + 2]);
-                }
-            }
-            if (incoher_max[l][k] != -1)
-            {
-
-                // if(incoher_max[l][k]!=-1)
-                counter_max++;
-                test2 = diminuer_Fmax(incoher_max[l][k], incoher_max[l][k + 2]);
-
-                if (!test2)
-                {
-                    //cout << "\n islam max \n";
-                    augmenter_Smax(incoher_max[l][k + 1], incoher_max[l][k + 2]);
-                }
+                augmenter_Smax(incoher_max[l][k + 1], incoher_max[l][k + 2]);
             }
         }
-        
-        
-        /*
+
         for (int p = 0; p < nombreMachines; p++)
         {
             machines[p].sequence();
         }
-        */
+        for (int p = 0; p < nombreMachines; p++)
+        {
+            machines[p].seq();
+        }
 
         // calculer_makespan();
-        // testu(10);
+    }
+    void calculer_makespan()
+    {
+        int t1[nombreGammes], i = 0, c;
+        int t2[nombreGammes], j = 0;
+        for (int l = 0; l < nombreGammes; l++)
+        {
+            t1[i] = (gammes[l].lis[(gammes[l].n) - 1].Smin) + (gammes[l].lis[(gammes[l].n) - 1].p);
+            i++;
+            t2[j] = (gammes[l].lis[(gammes[l].n) - 1].Smax) + (gammes[l].lis[(gammes[l].n) - 1].p);
+            j++;
+            ;
+        }
+
+        //***********fin_min*****************
+        c = max(t1[0], t1[1]);
+        for (i = 2; i < nombreGammes; i++)
+        {
+            c = max(c, t1[i]);
+        }
+        Fin_min = c;
+
+        //***********fin_max*****************
+        c = max(t2[0], t2[1]);
+        for (i = 2; i < nombreGammes; i++)
+        {
+            c = max(c, t2[i]);
+        }
+        Fin_max = c;
     }
     // ******** les fonction de l'affichage *********
     void affichage_dans_le_console_bellman_debutFin()
@@ -2170,6 +2129,7 @@ public:
             }
         }
         cout << "\n";
+
     }
     void affichage_dans_le_console_incoherentes_enitial()
     {
@@ -2177,7 +2137,7 @@ public:
         cout << "******** Incoherence au Min ********" << endl;
         cout << "**** Tache i **** Tache i+1 **** Ecart au min ****" << endl;
         nember_of_incoher_enitial = 0;
-        for (int i = 0; (i < 30) && (incoher_min[i][0] != -1); i++)
+        for (int i = 0; (i < 100) && (incoher_min[i][0] != -1); i++)
         {
             nember_of_incoher_enitial++;
             cout << "******* " << incoher_min[i][0];
@@ -2188,9 +2148,35 @@ public:
         cout << "\n \n******** Incoherence au Max ********" << endl;
         cout << "**** Tache i **** Tache i+1 **** Ecart au max ****" << endl;
 
-        for (int i = 0; (i < 30) && (incoher_max[i][0] != -1); i++)
+        for (int i = 0; (i < 100) && (incoher_max[i][0] != -1); i++)
         {
             nember_of_incoher_enitial++;
+            cout << "******* " << incoher_max[i][0];
+            cout << "*********** " << incoher_max[i][1];
+            cout << "************ " << incoher_max[i][2] << "******\n"
+                 << endl;
+        }
+    }
+    void affichage_dans_le_console_incoherentes_final()
+    {
+
+        cout << "******** Incoherence au Min ********" << endl;
+        cout << "**** Tache i **** Tache i+1 **** Ecart au min ****" << endl;
+        nember_of_incoher_final = 0;
+        for (int i = 0; (i < 30) && (incoher_min[i][0] != -1); i++)
+        {
+            nember_of_incoher_final++;
+            cout << "******* " << incoher_min[i][0];
+            cout << "*********** " << incoher_min[i][1];
+            cout << "************ " << incoher_min[i][2] << "******\n"
+                 << endl;
+        }
+        cout << "\n \n******** Incoherence au Max ********" << endl;
+        cout << "**** Tache i **** Tache i+1 **** Ecart au max ****" << endl;
+
+        for (int i = 0; (i < 30) && (incoher_max[i][0] != -1); i++)
+        {
+            nember_of_incoher_final++;
             cout << "******* " << incoher_max[i][0];
             cout << "*********** " << incoher_max[i][1];
             cout << "************ " << incoher_max[i][2] << "******\n"
@@ -2206,13 +2192,35 @@ public:
              << "****** Sequence Maitre Pyramide" << endl;
         for (int i = 0; (i < nombreMachines); i++)
         {
-            // machines[i].SeqToChaine();
+
             cout << "********* " << machines[i].num;
-            cout << "************* " << machines[i].S_dom();
-            cout << "*************** ";
-            // machines[i].seq();
+            cout << " ************* " << machines[i].S_dom();
+            machines[i].SeqToChaine();
+            cout << "*************** " << machines[i].chaine;
+
             cout << endl;
         }
+    }
+    void affichage_dans_le_console_le_tableux_final(double temps, int cmax_avent, int cmax_apret)
+    {
+        cout << " \n \n ************* l'affichage Final ************* \n"
+             << endl;
+        cout << "**** Problem "
+             << "**** Nbr de Produits "
+             << "**** Nbr de Machines ";
+        cout << "**** Nbr d'incohe initiale "
+             << "**** Nbr d'incohe traite"
+             << "**** Temps (s)"
+             << "**** Cmax"
+             << "**** Cmax" << endl;
+        cout << "***** Ex0" << numero;
+        cout << " ************* " << nombreGammes;
+        cout << " ****************** " << nombreMachines;
+        cout << " ****************** " << nember_of_incoher_enitial;
+        cout << " ********************** " << nember_of_incoher_enitial - nember_of_incoher_final;
+        cout << " ************** " << fixed << temps << setprecision(5);
+        cout << " ******* " << cmax_avent;
+        cout << " ***** " << cmax_apret << endl;
     }
     void affichage_dans_le_console()
     {
@@ -2225,8 +2233,9 @@ public:
         cout << " \n \n ********* Etape 1 ********* \n \n ";
         // lappele des fonction de ford-Bellman et le debut-fin
         // pour calcule le temps
-        // clock_t start, end;
-        // start = clock();
+        clock_t start, end;
+        start = clock();
+
         initialiser_atelier();
         calculer_ford();
         initialiser_atelier_machines();
@@ -2235,8 +2244,18 @@ public:
         // l affichage du resultat de Bellman et debut-fin
         affichage_dans_le_console_bellman_debutFin();
 
+        // resultat de la fonction Makespen
+        calculer_makespan();
+        cout << "\n \n ******** Makespan *******" << endl;
+        cout << "******  " << Fin_min << " <= Cmax <= " << Fin_max << " *******\n"
+             << endl;
+
+        cmax_avant = Fin_max ; 
+
         // le calcule du lincoherentes
         taches_incoherentes();
+
+        cout << " \n \n ********* Etape 1 ********* \n \n ";
 
         // laffichage du resultat de lincoherentes enitiale
         cout << "\n ************ l'affichage du resultat de l'incoherence initiale ************ \n " << endl;
@@ -2249,35 +2268,22 @@ public:
         affichage_dans_le_console_reordonner();
 
         // laffichage la corriger apret la reordonnoncement
+        cout << "\n\n l affichage apret la reordonnoncement \n";
         affichage_dans_le_console_bellman_debutFin();
         // laffichage de resultat de lincoherentes final
-        cout<<"\n ************ l'affichage du resultat de l'incoherence final ************ \n "<<endl;
-        affichage_dans_le_console_incoherentes_enitial();
-        /*
+        cout << "\n ************ l'affichage du resultat de l'incoherence final ************ \n " << endl;
+        affichage_dans_le_console_incoherentes_final();
 
-                // Etape 2
-
-                // laffichage la corriger apret la reordonnoncement
-                cout<<" \n \n ********* Etape 2 ********* \n \n ";
-                initialiser_atelier_machines();
-                calculer_debut_fin();
-                affichage_dans_le_console_bellman_debutFin();
-
-                // laffichage de resultat de lincoherentes final
-                cout<<"\n ************ l'affichage du resultat de l'incoh�rence final ************ \n "<<endl;
-                affichage_dans_le_console_incoherentes_final();
-
-                // l'appel et l'affichage de la fonction Makespan
-                calculer_makespan();
-                cout<<" \n \n \n ******** l'affichage du resultat de Makespane ********* "<<endl;
-                cout<<"\n ******** Makespan *******"<<endl;
-                cout<<"******  "<<Fin_min<<" <= Cmax <= "<<Fin_max<<" *******"<<endl;
-                end = clock();
-                double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
-                // laffichage de la table final
-                affichage_dans_le_console_le_tableux_final(time_taken);
-                */
-               
+        // l'appel et l'affichage de la fonction Makespan
+        calculer_makespan();
+        cout << " \n \n \n ******** l'affichage du resultat de Makespane ********* " << endl;
+        cout << "\n ******** Makespan *******" << endl;
+        cout << "******  " << Fin_min << " <= Cmax <= " << Fin_max << " *******" << endl;
+        cmax_apret = Fin_max;
+        end = clock();
+        double time_taken = double(end - start) / double(CLOCKS_PER_SEC);
+        // laffichage de la table final
+        affichage_dans_le_console_le_tableux_final(time_taken, cmax_avant, cmax_apret);
     }
 };
 
