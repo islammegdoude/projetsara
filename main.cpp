@@ -189,6 +189,8 @@ public:
         {
             n = 0;
             m = 0;
+
+
             for (j = 0; j < nbrt; j++)
             {
                 if ((tab[j].r < tab[i].r) && (tab[j].d > tab[i].d))
@@ -413,7 +415,7 @@ public:
                 //
             }
         }
-        cout << tabsom[0] << "<"; //
+        cout << tabsom[0] << "<";
         tab_seq.push_back(tabsom[0]);
         //*************************************************
         for (i = 0; i < nbrs - 1; i++)
@@ -466,7 +468,6 @@ public:
                         {
                             cout << tabpyr_r[i][j] << "<";
                             tab_seq.push_back(tabpyr_r[i][j]);
-                            //
                         }
                     }
                 }
@@ -993,7 +994,7 @@ public:
                     if (tabpyr[i][j] == tab1[p][0])
                         test = true;
                 }
-                if (!test)
+                if (!test )
                 {
                     k = 0;
                     for (o = 0; o < 40; o++)
