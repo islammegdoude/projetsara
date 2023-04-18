@@ -189,19 +189,51 @@ public:
         {
             n = 0;
             m = 0;
-
-
             for (j = 0; j < nbrt; j++)
             {
                 if ((tab[j].r < tab[i].r) && (tab[j].d > tab[i].d))
                 {
                     n++;
-                }
-                else if ((tab[j].r > tab[i].r) && (tab[j].d < tab[i].d))
+                }else if ((tab[j].r > tab[i].r) && (tab[j].d < tab[i].d))
                 {
                     m++;
                 }
+
+                // r = r 
+                //if ((tab[j].r = tab[i].r) && (tab[j].d > tab[i].d))
+                //{
+                //    //n++;
+                //}
+                //if ((tab[j].r = tab[i].r) && (tab[j].d < tab[i].d))
+                //{
+                //    //m++;
+                //}
+                
+                // d = d 
+                //if ((tab[j].r < tab[i].r) && (tab[j].d = tab[i].d))
+                //{
+                //    n++;
+                //}
+                //else if ((tab[j].r > tab[i].r) && (tab[j].d = tab[i].d))
+                //{
+                //    m++;
+                //}
+
+                // r = r et d = d 
+                //if ((tab[j].r = tab[i].r) && (tab[j].d = tab[i].d))
+                //{
+                //    for( int z  = 0 ; z < k ; z++){
+                //        if(tabsom[z] == tab[j].t){
+                //            m++;
+                //        }
+                //    }
+                //    if(m==0){
+                //        n++;
+                //    }
+                //}
             }
+
+
             if ((n != 0) && (m == 0))
             {
                 tabsom[k] = tab[i].t;
@@ -210,7 +242,6 @@ public:
             else if ((n == 0) && (m == 0))
             {
                 tabsom[k] = tab[i].t;
-
                 k++;
             }
         }
@@ -261,14 +292,81 @@ public:
                             o++;
                             b++;
                         }
+                        //if ((tab[l].r = tab[j].r) && (tab[l].d > tab[j].d))
+                        //{
+                        //    tabpyr[n][o] = tab[l].t;
+                        //    o++;
+                        //    b++;
+                        //}
+                        //if ((tab[l].r < tab[j].r) && (tab[l].d = tab[j].d))
+                        //{
+                        //    tabpyr[n][o] = tab[l].t;
+                        //    o++;
+                        //    b++;
+                        //}
+                        //if ((tab[l].r = tab[j].r) && (tab[l].d = tab[j].d))
+                        //{
+                        //    tabpyr[n][o] = tab[l].t;
+                        //    o++;
+                        //    b++;
+                        //}
                     }
                     if (b == 0)
                         tabpyr[n][o] = 0;
                 }
             }
         }
+        
     }
 
+
+    void card(){
+        int o ; 
+        int b ;
+
+        for (int n = 0; n < nbrs; n++)
+        {
+            for (int j = 0; j < nbrt; j++)
+            {
+                if (tabsom[n] == tab[j].t)
+                {
+                    o = 0;
+                    b = 0;
+                    for (int l = 0; l < nbrt; l++)
+                    {
+                        if ((tab[l].r < tab[j].r) && (tab[l].d > tab[j].d))
+                        {
+                            tabpyr[n][o] = tab[l].t;
+                            
+                            o++;
+                            b++;
+                        }
+                        if ((tab[l].r = tab[j].r) && (tab[l].d > tab[j].d))
+                        {
+                            tabpyr[n][o] = tab[l].t;
+
+                            o++;
+                            b++;
+                        }
+                        if ((tab[l].r < tab[j].r) && (tab[l].d = tab[j].d))
+                        {
+                            tabpyr[n][o] = tab[l].t;
+
+                            o++;
+                            b++;
+                        }
+                        if ((tab[l].r = tab[j].r) && (tab[l].d = tab[j].d))
+                        {
+                            tabpyr[n][o] = tab[l].t;
+
+                            o++;
+                            b++;
+                        }
+                    }
+                }
+            }
+        }
+    }
     void ordre_r()
     {
         for (int i = 0; i < 40; i++)
