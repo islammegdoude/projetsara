@@ -662,76 +662,134 @@ public:
         }
         return test;
     }
+    // int U(int x)
+    // {
+    //     int i, j = 0, t = 0;
+    //     int k = 0; // crated by islam
+    //     int resultat = 0;
+    //     // *****
+    //     for (i = 0; i <= nbrs; i++)
+    //     {
+    //         if (i != nbrs)
+    //         {
+    //             if (x == tabsom[i])
+    //             {
+    //                 resultat = i + 1;
+    //                 break;
+    //             }
+    //         }
+    //         else
+    //         {
+    //             while ((k < 40) && (t == 0) && (tabpyr[k][j] != -1))
+    //             {
+    //                 while ((j < 40) && (t == 0) && (tabpyr[k][j] != -1) && (tabpyr[k][j] != 0))
+    //                 {
+    //                     if (x == tabpyr[k][j])
+    //                     {
+    //                         t = 1;
+    //                     }
+    //                     j++;
+    //                 }
+    //                 k++;
+    //             }
+    //             resultat = i;
+    //             break;
+    //         }
+    //     }
+    //     return resultat;
+    // }
     int U(int x)
     {
         int i, j = 0, t = 0;
-        int k = 0; // crated by islam
-        int resultat = 0;
-        // *****
-        for (i = 0; i <= nbrs; i++)
+        for (i = 0; i < nbrs; i++)
         {
-            if (i != nbrs)
-            {
-                if (x == tabsom[i])
-                {
-                    resultat = i + 1;
-                    break;
-                }
-            }
-            else
-            {
-                while ((k < 40) && (t == 0) && (tabpyr[k][j] != -1))
-                {
-                    while ((j < 40) && (t == 0) && (tabpyr[k][j] != -1) && (tabpyr[k][j] != 0))
-                    {
-                        if (x == tabpyr[k][j])
-                        {
-                            t = 1;
-                        }
-                        j++;
-                    }
-                    k++;
-                }
-                resultat = i;
-                break;
-            }
+            if (x == tabsom[i])
+                return (i + 1);
         }
-        return resultat;
+        if (i == nbrs)
+        {
+            i = 0;
+            while ((i < 40) && (t == 0) && (tabpyr[i][j] != -1))
+            {
+                while ((j < 40) && (t == 0) && (tabpyr[i][j] != -1) && (tabpyr[i][j] != 0))
+                {
+                    if (x == tabpyr[i][j])
+                    {
+                        t = 1;
+                    }
+                    j++;
+                }
+                i++;
+            }
+            return (i);
+        }
+        return (i);
     }
+    // int V(int x)
+    // {
+    //     int i, j, t, m, resultat;
+    //     for (i = 0; i <= nbrs; i++)
+    //     {
+    //         if (i != nbrs)
+    //         {
+    //             if (x == tabsom[i])
+    //             {
+    //                 resultat = i + 1;
+    //                 break;
+    //             }
+    //         }
+    //         else
+    //         {
+    //             for (i = 0; i < 40; i++)
+    //             {
+    //                 j = 0;
+    //                 t = 0;
+    //                 while ((j < 40) && (tabpyr[i][j] != -1) && (t == 0))
+    //                 {
+    //                     if (tabpyr[i][j] == x)
+    //                     {
+    //                         m = i;
+    //                         t = 1;
+    //                     }
+    //                     j++;
+    //                 }
+    //             }
+    //             resultat = m + 1;
+    //             break;
+    //         }
+    //     }
+    //     return resultat;
+    // }
     int V(int x)
     {
-        int i, j, t, m, resultat;
-        for (i = 0; i <= nbrs; i++)
+        int i, j, t, m;
+        for (i = 0; i < nbrs; i++)
         {
-            if (i != nbrs)
+            if (x == tabsom[i])
             {
-                if (x == tabsom[i])
-                {
-                    resultat = i + 1;
-                    break;
-                }
-            }
-            else
-            {
-                for (i = 0; i < 40; i++)
-                {
-                    j = 0;
-                    t = 0;
-                    while ((j < 40) && (tabpyr[i][j] != -1) && (t == 0))
-                    {
-                        if (tabpyr[i][j] == x)
-                        {
-                            m = i;
-                            t = 1;
-                        }
-                        j++;
-                    }
-                }
-                resultat = m + 1;
-                break;
+                m = i + 1;
+                return m;
             }
         }
-        return resultat;
+        if (i == nbrs)
+        {
+            for (i = 0; i < 40; i++)
+            {
+                j = 0;
+                t = 0;
+                while ((j < 40) && (tabpyr[i][j] != -1) && (t == 0))
+                {
+                    if (tabpyr[i][j] == x)
+                    {
+                        m = i;
+                        t = 1;
+                    }
+                    j++;
+                }
+            }
+            return m + 1;
+        }
+        return m + 1;
     }
     int L_min(int m)
     {
@@ -793,6 +851,7 @@ public:
             return info_r(m) + info_p(m) - info_d(m);
         }
     }
+    
     int L_max(int m)
     {
         int i, j, k, l, x, p, h, seq1[40], seq2[40];
@@ -992,6 +1051,7 @@ public:
             return info_r(m) + info_p(m) - info_d(m);
         }
     }
+    
     void machine_calculer()
     {
         for (int i = 0; i < nbrt; i++)
